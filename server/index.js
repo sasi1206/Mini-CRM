@@ -13,7 +13,7 @@ const companyRoute = require("./Routes/companyRoute");
 const taskRoute = require("./Routes/taskRoute");
 const userRoute = require("./Routes/userRoute");
 
-const ALLOWED_ORIGINS = [];
+const ALLOWED_ORIGINS = ["https://mini-crm-bay.vercel.app","https://apimini-crm-lilac.vercel.app"];
 
 app.use(express.json());
 app.use(cookieParser());
@@ -49,3 +49,5 @@ connection.on("connected", () => {
     console.log("Server is running");
   });
 });
+
+module.exports = app;
