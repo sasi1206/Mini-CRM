@@ -1,0 +1,17 @@
+.working-cont {
+  height: 100dvh;
+  display: flex;
+  padding: 0 10px;
+}
+
+.sidebar-cont {
+  height: 100%;
+  flex-basis: 20%;
+  border-right: 1px solid black;
+  min-width: 20%;
+}
+
+.outlet-cont {
+  height: 100%;
+  flex-basis: 80%;
+}

@@ -1,0 +1,11 @@
+.table-actions{
+    margin: 15px 5px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.lead-table {
+  margin: 10px 0 0 10px;
+}

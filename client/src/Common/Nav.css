@@ -1,0 +1,16 @@
+.nav-container {
+  border: 1px solid black;
+  display: flex;
+  padding: 0 10px;
+}
+.nav-container .logo {
+  flex-basis: 20%;
+  border-right: 1px solid black;
+}
+.nav-container .user-actions {
+  flex-basis: 80%;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 10px;   
+}
