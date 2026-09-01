@@ -7,8 +7,19 @@ async function fetchTasks(req, res) {
       {
         $lookup: {
           from: "leads",
-          foreignField: "_id",
-          localField: "lead_id",
+          let: { localId: "$lead_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$_id", "$$localId"] },
+                    { $eq: ["$isDeleted", false] },
+                  ],
+                },
+              },
+            },
+          ],
           as: "lead",
         },
       },

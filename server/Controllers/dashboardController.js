@@ -10,7 +10,10 @@ async function getDropDownOptions(req, res) {
       { _id: 1, company_name: 1 },
     );
 
-    const leadOptions = await leads.find({}, { _id: 1, name: 1 });
+    const leadOptions = await leads.find(
+      { isDeleted: false },
+      { _id: 1, name: 1 },
+    );
 
     const userOptions = await users.find({}, { _id: 1, username: 1 });
 
@@ -33,11 +36,23 @@ async function getData(req, res) {
     const [leadData] = await leads.aggregate([
       {
         $facet: {
-          totalLeads: [{ $count: "TotalLeads" }],
+          totalLeads: [
+            {
+              $match: {
+                isDeleted: false,
+              },
+            },
+            { $count: "TotalLeads" },
+          ],
           qualifiedLeads: [
             {
               $match: {
-                status: "contacted",
+                $expr: {
+                  $and: [
+                    { $eq: ["$status", "contacted"] },
+                    { $eq: ["$isDeleted", false] },
+                  ],
+                },
               },
             },
             {
@@ -52,6 +67,30 @@ async function getData(req, res) {
       {
         $facet: {
           due_today: [
+            {
+              $lookup: {
+                from: "leads",
+                let: { localId: "$lead_id" },
+                pipeline: [
+                  {
+                    $match: {
+                      $expr: {
+                        $and: [
+                          { $eq: ["$_id", "$$localId"] },
+                          { $eq: ["$isDeleted", false] },
+                        ],
+                      },
+                    },
+                  },
+                ],
+                as: "lead",
+              },
+            },
+            {
+              $unwind: {
+                path: "$lead",
+              },
+            },
             {
               $match: {
                 $expr: {
@@ -80,8 +119,37 @@ async function getData(req, res) {
           ],
           completed_tasks: [
             {
+              $lookup: {
+                from: "leads",
+                let: { localId: "$lead_id" },
+                pipeline: [
+                  {
+                    $match: {
+                      $expr: {
+                        $and: [
+                          { $eq: ["$_id", "$$localId"] },
+                          { $eq: ["$isDeleted", false] },
+                        ],
+                      },
+                    },
+                  },
+                ],
+                as: "lead",
+              },
+            },
+            {
+              $unwind: {
+                path: "$lead",
+              },
+            },
+            {
               $match: {
-                status: "done",
+                $expr: {
+                  $and: [
+                    { $eq: ["$status", "done"] },
+                    { $eq: ["$lead.isDeleted", false] },
+                  ],
+                },
               },
             },
             {

@@ -6,8 +6,20 @@ async function fetchCompanies(req, res) {
       {
         $lookup: {
           from: "leads",
-          foreignField: "company_id",
-          localField: "_id",
+
+          let: { localId: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$company_id", "$$localId"] },
+                    { $eq: ["$isDeleted", false] },
+                  ],
+                },
+              },
+            },
+          ],
           as: "companyLeads",
         },
       },
