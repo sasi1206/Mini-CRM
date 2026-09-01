@@ -5,7 +5,7 @@ async function getLeads(req, res) {
   try {
     const { search, page, filter } = req.query;
 
-    let filterOptions = [];
+    let filterOptions = [{ $eq: ["$isDeleted", false] }];
 
     if (search) {
       filterOptions.push({
