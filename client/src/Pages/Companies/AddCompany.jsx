@@ -29,7 +29,7 @@ const AddCompany = () => {
 
       if (response.data.success) {
         alert(response.data.message);
-        navigate("/companies");
+        navigate("/dashboard/companies");
       }
     } catch (error) {
       console.log("Error while adding company", error);

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Nav from "./Nav";
 import api from "../Config/api";
@@ -8,6 +8,8 @@ import "./Layout.css";
 const Layout = () => {
   const [options, setOptions] = useState({});
   const navigate = useNavigate();
+
+  const { pathname } = useLocation();
 
   async function getOptions() {
     try {
@@ -30,7 +32,7 @@ const Layout = () => {
 
   useEffect(() => {
     getOptions();
-  }, []);
+  }, [pathname]);
 
   return (
     <>
